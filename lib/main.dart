@@ -41,7 +41,9 @@ void main() {
   runApp(new MaterialApp(
     title: APP_NAME,
     theme: new ThemeData.dark(),
-    routes: <String, WidgetBuilder>{},
+    routes: <String, WidgetBuilder>{
+      '/settings': (ctx) => new Settings(),
+    },
     home: new E1547Home(),
   ));
 }
@@ -67,7 +69,7 @@ class PostPreview extends StatelessWidget {
   }
 
   Widget _buildSafetyRating() {
-    const colors = const <String, Color>{
+    const colors = const <String, Color> {
       "E": Colors.red,
       "S": Colors.green,
       "Q": Colors.yellow,
@@ -214,7 +216,7 @@ class _E1547HomeState extends State<E1547Home> {
         new ListTile(
             leading: const Icon(Icons.settings),
             title: new Text('Settings'),
-            onTap: () => _log.info('Tapped Settings')),
+            onTap: () => Navigator.popAndPushNamed(context, '/settings')),
         new AboutListTile(icon: const Icon(Icons.help)),
       ])),
       floatingActionButton: new _SearchFab(
@@ -247,5 +249,29 @@ class _SearchFab extends StatelessWidget {
               ));
         },
         child: const Icon(Icons.search));
+  }
+}
+
+class Settings extends StatefulWidget {
+  @override
+  SettingsState createState() => new SettingsState();
+}
+
+class SettingsState extends State<Settings> {
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(title: new Text('Settings')),
+      body: new ListView(
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        children: <Widget> [
+          new ListTile(
+            leading: const Icon(Icons.public),
+            title: new Text('Set backend host'),
+            trailing: new TextField(controller: new TextEditingController(text: "hello")),
+          ),
+        ],
+      ),
+    );
   }
 }
