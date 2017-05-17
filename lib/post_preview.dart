@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 
 import 'package:logging/logging.dart' show Logger;
 import 'package:url_launcher/url_launcher.dart' as url show launch;
+import 'package:fullscreen_mode/fullscreen_mode.dart' show FullscreenMode;
 import 'package:zoomable_image/zoomable_image.dart' show ZoomableImage;
 
 import 'src/e1547/e1547.dart' show Post;
@@ -62,15 +63,18 @@ class PostPreview extends StatelessWidget {
   }
 
   Widget _buildImagePreview(BuildContext context) {
+    FullscreenMode.setNormal();
     return new GestureDetector(
-        onTap: () {
+        onTap: () async {
           _log.fine("tapped post ${post.id}");
-          Navigator.of(context).push(new MaterialPageRoute<Null>(
+          await Navigator.of(context).push(new MaterialPageRoute<Null>(
             builder: (context) {
+              FullscreenMode.setFullscreen();
               return new ZoomableImage(new NetworkImage(post.file_url),
                   scale: 4.0);
             },
           ));
+          FullscreenMode.setNormal();
         },
         child: new LayoutBuilder(
             builder: (context, constraints) => new Image.network(
