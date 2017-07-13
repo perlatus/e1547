@@ -18,7 +18,8 @@ import 'dart:convert' show JsonEncoder;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show TextOverflow;
-import 'package:flutter/services.dart' show Clipboard, ClipboardData, SystemChrome, SystemUiOverlay;
+import 'package:flutter/services.dart'
+    show Clipboard, ClipboardData, SystemChrome, SystemUiOverlay;
 
 import 'package:logging/logging.dart' show Logger;
 import 'package:url_launcher/url_launcher.dart' as url;
@@ -316,6 +317,7 @@ class _MoreDialog extends StatelessWidget {
     return new SimpleDialog(title: new Text('post #${post.id}'), children: [
       _buildPostInfo(ctx),
       _buildCopy(ctx),
+      _buildDownload(ctx),
     ]);
   }
 
@@ -379,6 +381,25 @@ class _MoreDialog extends StatelessWidget {
     await Clipboard.setData(new ClipboardData(text: text));
     Navigator.of(ctx).pop();
     Navigator.of(ctx).pop();
+  }
+
+  // TODO: Android-only, make sure this is hidden on iOS
+  Widget _buildDownload(BuildContext ctx) {
+    return new ListTile(
+        leading: const Icon(Icons.file_download),
+        title: new Text('Download'),
+        onTap: () => showDialog(
+            context: ctx,
+            child: new SimpleDialog(
+              title: new Text('post #${post.id} download'),
+              children: <Widget>[
+                const LinearProgressIndicator(),
+                new TextField(
+                    controller: new TextEditingController(
+                        text:
+                            '${post.artist.join("+")}#${post.id}.${post.fileExt}')),
+              ],
+            )));
   }
 }
 
