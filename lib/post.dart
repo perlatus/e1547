@@ -26,6 +26,7 @@ import 'package:zoomable_image/zoomable_image.dart' show ZoomableImage;
 
 import 'comment.dart' show CommentsWidget;
 import 'persistence.dart' as persistence;
+import 'storage.dart' as storage;
 
 class Post {
   Map raw;
@@ -35,15 +36,15 @@ class Post {
       new Uri(scheme: 'https', host: host, path: '/post/show/$id');
 
   ImageProvider get fullImage {
-    return new NetworkImage(fileUrl);
+    return storage.getImage(Uri.parse(fileUrl));
   }
 
   ImageProvider get previewImage {
-    return new NetworkImage(previewUrl);
+    return storage.getImage(Uri.parse(previewUrl));
   }
 
   ImageProvider get sampleImage {
-    return new NetworkImage(sampleUrl);
+    return storage.getImage(Uri.parse(sampleUrl));
   }
 
   int id;
