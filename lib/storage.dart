@@ -14,9 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import 'dart:typed_data' show Uint8List;
-
-import 'package:flutter/services.dart' show MemoryImage, ImageProvider;
+import 'package:flutter/services.dart' show NetworkImage, ImageProvider;
 
 import 'http.dart' show HttpCustom;
 
@@ -25,6 +23,6 @@ HttpCustom _http = new HttpCustom();
 /// Retrieve an image, using cache if possible. If the image is loaded from
 /// [location], then it will be saved to the cache.
 ImageProvider getImage(Uri location) {
-  Uint8List imageBytes; // = _http.getUrl(location).then((r) => r.bodyBytes);
-  return new MemoryImage(imageBytes);
+  // Uint8List imageBytes; // = _http.getUrl(location).then((r) => r.bodyBytes);
+  return new NetworkImage(location.toString());
 }
