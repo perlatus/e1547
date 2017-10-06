@@ -28,7 +28,7 @@ import 'pagination.dart' show LinearPagination;
 import 'persistence.dart' as persistence;
 import 'post.dart';
 import 'range_dialog.dart' show RangeDialog;
-import 'tag.dart' show Tagset;
+import 'tag.dart';
 import 'tag_entry.dart' show TagEntryPage;
 import 'client.dart' show client;
 
@@ -191,7 +191,25 @@ class _PostsPageState extends State<PostsPage> {
       return new Center(child: const Icon(Icons.refresh));
     }
 
-    return new PostGrid(_posts.elements, onLoadMore: _loadNextPage);
+    return new FutureBuilder<List<Post>>(future: () async {
+      Tagset blacklist = await persistence.getLocalBlacklist();
+      bool postNotBlacklisted(Post p) {
+        for (Tag t in blacklist) {
+          if (p.tags.contains(t)) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      return _posts.elements.where(postNotBlacklisted).toList();
+    }(), builder: (BuildContext ctx, AsyncSnapshot<List<Post>> snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        return new PostGrid(snapshot.data, onLoadMore: _loadNextPage);
+      } else {
+        return new Text('waiting on filter');
+      }
+    });
   }
 
   Widget _buildDrawer(BuildContext ctx) {

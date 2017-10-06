@@ -26,6 +26,7 @@ import 'package:zoomable_image/zoomable_image.dart' show ZoomableImage;
 
 import 'comment.dart' show CommentsWidget;
 import 'persistence.dart' as persistence;
+import 'tag.dart' show Tagset;
 
 class Post {
   Map raw;
@@ -47,6 +48,7 @@ class Post {
   }
 
   int id;
+  Tagset tags;
   String author;
   int score;
   int favCount;
@@ -66,6 +68,7 @@ class Post {
     this.raw = raw;
 
     id = raw['id'];
+    tags = new Tagset.parse(raw['tags']);
     author = raw['author'];
     score = raw['score'];
     favCount = raw['fav_count'];

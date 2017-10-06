@@ -24,6 +24,7 @@ import 'tag.dart' show Tagset;
 
 const _HOST = 'host';
 const _TAGS = 'tags';
+const _LOCAL_BLACKLIST = 'local blacklist';
 
 Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -39,4 +40,11 @@ Future<Tagset> getTags() => _prefs.then((p) {
     });
 setTags(Tagset tags) => _prefs.then((p) {
       p.setString(_TAGS, tags.toString());
+    });
+
+Future<Tagset> getLocalBlacklist() => _prefs.then((p) {
+      return new Tagset.parse(p.getString(_LOCAL_BLACKLIST) ?? '');
+    });
+setLocalBlacklist(Tagset tags) => _prefs.then((p) {
+      p.setString(_LOCAL_BLACKLIST, tags.toString());
     });

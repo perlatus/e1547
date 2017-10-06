@@ -79,8 +79,14 @@ class Tagset extends Object with IterableMixin<Tag> {
     _log.fine('tagset tags: $_tags');
   }
 
-  bool contains(Object tagName) {
-    return _tags.containsKey(tagName);
+  /// Checks if [other] is a [Tag] and is contained in this [Tagset].
+  bool contains(Object other) {
+    if (other is! Tag) {
+      return false;
+    }
+
+    Tag t = other as Tag;
+    return _tags.containsKey(t.name) && _tags[t.name] == t;
   }
 
   String operator [](String name) {
