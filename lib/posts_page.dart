@@ -207,7 +207,7 @@ class _PostsPageState extends State<PostsPage> {
       if (snapshot.connectionState == ConnectionState.done) {
         return new PostGrid(snapshot.data, onLoadMore: _loadNextPage);
       } else {
-        return new Text('waiting on filter');
+        return new Center(child: new Text("Applying local blacklist"));
       }
     });
   }

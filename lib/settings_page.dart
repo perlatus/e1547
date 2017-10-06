@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'persistence.dart' as persistence;
+import 'tag.dart' show Tagset;
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -28,8 +29,11 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage> {
   Future<String> _initialHost = persistence.getHost();
+  Future<Tagset> _initialLocalBlacklist = persistence.getLocalBlacklist();
 
   String _host;
+
+  TextEditingController _localBlacklistController = new TextEditingController();
 
   @override
   Widget build(BuildContext ctx) {
@@ -43,6 +47,7 @@ class SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _initialHost.then(_onNewHostSelected);
+    _initialLocalBlacklist.then(_onSetLocalBlacklist);
   }
 
   Widget _buildBody(BuildContext ctx) {
@@ -59,6 +64,21 @@ class SettingsPageState extends State<SettingsPage> {
         groupValue: _host,
         onChanged: _onNewHostSelected,
       ),
+      const Divider(),
+      new Text('Local blacklist'),
+      new TextField(
+          controller: _localBlacklistController,
+          onSubmitted: (s) => _onSetLocalBlacklist(new Tagset.parse(s))),
+      new Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          new RaisedButton(
+            child: new Text('save'),
+            onPressed: () => _onSetLocalBlacklist(
+                new Tagset.parse(_localBlacklistController.text)),
+          ),
+        ],
+      ),
     ]);
 
     return new Container(padding: new EdgeInsets.all(10.0), child: body);
@@ -73,5 +93,16 @@ class SettingsPageState extends State<SettingsPage> {
     });
 
     persistence.setHost(host);
+  }
+
+  void _onSetLocalBlacklist(Tagset blacklist) {
+    print('SettingsPageState._onLocalBlacklistLoaded(blacklist=$blacklist)');
+    assert(blacklist != null);
+
+    setState(() {
+      _localBlacklistController.text = blacklist.toString();
+    });
+
+    persistence.setLocalBlacklist(blacklist);
   }
 }
