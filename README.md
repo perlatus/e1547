@@ -2,6 +2,12 @@
 
 A mobile app for e621+e926.
 
+> update 200926:
+> **Much improved version by clragon: https://github.com/clragon/e1547**
+>
+> Many thanks to clragon for carrying the torch forward!
+
+
 If you have questions/comments/suggestions, [pop into the discord channel!][discord]
 You can also post to the [e621 forum thread][forum].
 
